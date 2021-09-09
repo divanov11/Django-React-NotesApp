@@ -1,1 +1,0 @@
-web: gunicorn noteapi.wsgi --log-file -

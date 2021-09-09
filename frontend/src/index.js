@@ -8,5 +8,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-//TESTING CONTINUOUS DEPLPOYMENT ON NETLIFY
