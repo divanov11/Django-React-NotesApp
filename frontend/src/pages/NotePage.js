@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ReactComponent as ArrowLeft } from '../assets/arrow-left.svg'
 import { Link } from 'react-router-dom'
+import jQuery from 'jquery';
 
 const NotePage = ({ match, history }) => {
 
@@ -21,21 +22,40 @@ const NotePage = ({ match, history }) => {
     }
 
     let createNote = async () => {
+        var csrftoken = getCookie('csrftoken');
         fetch(`/api/notes/`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
             },
             body: JSON.stringify(note)
         })
     }
 
-
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
     let updateNote = async () => {
+        var csrftoken = getCookie('csrftoken');
         fetch(`/api/notes/${noteId}/`, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
+            'headers': {
+                'Content-Type':'application/json',
+                'X-CSRFToken': csrftoken,
             },
             body: JSON.stringify(note)
         })
@@ -43,11 +63,13 @@ const NotePage = ({ match, history }) => {
 
 
     let deleteNote = async () => {
+        var csrftoken = getCookie('csrftoken');
         fetch(`/api/notes/${noteId}/`, {
             method: 'DELETE',
             'headers': {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
         })
         history.push('/')
     }
